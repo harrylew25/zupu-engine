@@ -20,6 +20,9 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "tsx src/sandbox.ts",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepack": "pnpm build"
@@ -29,6 +32,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
+    "@biomejs/biome": "2.4.11",
     "@types/node": "^25.6.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
