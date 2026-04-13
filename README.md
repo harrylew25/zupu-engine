@@ -7,6 +7,8 @@ A high-performance kinship resolution engine built with TypeScript, designed to 
 - **Language:** [TypeScript 6.0+](https://www.typescriptlang.org/)
 - **Runtime:** [Node.js](https://nodejs.org/) (ES Modules)
 - **Package Manager:** [pnpm 10+](https://pnpm.io/)
+- **Linter & Formatter:** [Biome 2.4+](https://biomejs.dev/) (Rust-based)
+- **Testing:** [Vitest](https://vitest.dev/)
 - **Compiler:** `tsc` (Target: ESNext)
 
 ## 🏗️ Core Architecture: DAG Traversal
@@ -16,14 +18,12 @@ The engine treats kinship as a **Directed Acyclic Graph**. Unlike traditional tr
 1.  **Nodes:** Represent individuals or relationship states (e.g., "Father", "Wife").
 2.  **Edges:** Represent relationship transitions (e.g., `+f` for father, `+w` for wife).
 3.  **Traversal:** The `resolve()` method takes a `RelationStep[]` path and reduces it by looking up edge transitions in a pre-computed `rules` dictionary.
-4.  **Generational Delta:** Each edge carries a `gen` value (e.g., Father = +1, Son = -1), allowing the engine to calculate the precise generational distance from the "Ego" (the starting person).
+4.  **Generational Delta:** Each edge carries a `gen` value (e.g., Father = +1, Son = -1).
 
 ### Sample Input
 
-The engine resolves relationship paths defined as an array of `RelationStep` objects. Each step represents a single link in the kinship chain.
-
 ```typescript
-import { RelationStep } from './src/types.js';
+import { RelationStep } from '@harrylew/zupu-engine';
 
 // Path for: "Wife's Father's 2nd Younger Brother"
 const samplePath: RelationStep[] = [
@@ -31,25 +31,6 @@ const samplePath: RelationStep[] = [
   { rel: 'f' },             // Father
   { rel: 'lb', index: 2 }   // 2nd Younger Brother
 ];
-```
-
-## 📂 Project Structure
-
-```text
-zupu-engine/
-├── dist/                # Compiled output (organized into src/ and types/)
-├── src/                 # Core engine and dictionary logic
-│   ├── dictionary.ts    
-│   ├── index.ts         # Library Entry Point (Crucial for exports)
-│   ├── sandbox.ts       
-│   └── zupuEngine.ts    
-├── tests/               # All unit tests
-│   └── zupuEngine.test.ts 
-├── types/               # Shared type definitions
-│   └── index.ts
-├── package.json         
-├── tsconfig.json        
-└── pnpm-lock.yaml       
 ```
 
 ## 🛠️ Getting Started
@@ -62,19 +43,20 @@ pnpm install
 
 ### Local Development
 
-To run the engine directly from source (using `tsx`):
+To run the engine directly from source:
 
 ```bash
 pnpm start
 ```
 
-### Build & Test
+### Code Quality & Testing
 
-The project uses **Vitest** for unit testing and **tsc** for building the distribution:
+The project uses **Biome** for blazing-fast linting and formatting, and **Vitest** for unit testing:
 
 ```bash
+pnpm check         # Lint, format, and organize imports
+pnpm format        # Format files only
 pnpm test          # Run all unit tests
-pnpm test:watch    # Run tests in watch mode
 pnpm build         # Compile to dist/ for production
 ```
 
@@ -101,9 +83,29 @@ const result = engine.resolve([{ rel: 'f' }, { rel: 'f' }]);
 console.log(result.title); // "祖父"
 ```
 
+## 📂 Project Structure
+
+```text
+zupu-engine/
+├── dist/                # Compiled output (organized into src/ and types/)
+├── src/                 # Core engine and dictionary logic
+│   ├── types/           # Shared type definitions
+│   │   └── index.ts
+│   ├── dictionary.ts    
+│   ├── index.ts         # Library Entry Point
+│   ├── sandbox.ts       
+│   └── zupuEngine.ts    
+├── tests/               # All unit tests
+│   └── zupuEngine.test.ts 
+├── biome.json           # Biome configuration (Rust-speed linting)
+├── package.json         
+├── tsconfig.json        
+└── pnpm-lock.yaml       
+```
+
 ## 📜 Features
 
-- **Polygamy Support:** Detects `Shu` (庶) vs `Di` (嫡) lineage status via index tracking.
-- **Seniority Mapping:** Automatically applies seniority titles (e.g., "大", "二") based on relation indices.
+- **Polygamy Support:** Detects `Shu` (庶) vs `Di` (嫡) lineage status.
+- **Seniority Mapping:** Automatically applies seniority titles (e.g., "大", "二").
 - **Deep Lineage:** Fallback logic for ancestors/descendants beyond the 10th generation.
 - **ESM Native:** Fully compatible with modern Node.js module resolution.
