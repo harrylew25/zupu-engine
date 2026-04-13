@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { ZupuEngine } from '../src/zupuEngine.js';
+import { describe, expect, it } from 'vitest';
 import { dictionary } from '../src/dictionary.js';
-import { RelationStep } from '../src/types/index.js';
+import type { RelationStep } from '../src/types/index.js';
+import { ZupuEngine } from '../src/zupuEngine.js';
 
 describe('ZupuEngine', () => {
   const engine = new ZupuEngine(dictionary, 'm');
@@ -50,13 +50,18 @@ describe('ZupuEngine', () => {
 
   it('should handle "Deep Lineage" for long paths (>10 steps)', () => {
     const deepPath: RelationStep[] = [
-      { rel: 'f' }, { rel: 'f' },
-      { rel: 'f' }, { rel: 'f' },
-      { rel: 'f' }, { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
       { rel: 'lb' },
       { rel: 'w' },
-      { rel: 'f' }, { rel: 'f' },
-      { rel: 'f' }, { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
     ];
 
     const res = engine.resolve(deepPath);
@@ -64,8 +69,12 @@ describe('ZupuEngine', () => {
   });
 
   it('should return "远亲" for moderately long paths that miss rules', () => {
-    const res = engine.resolve([{ rel: 'f' }, { rel: 'f' }, { rel: 'f' }, { rel: 'f' }]);
+    const res = engine.resolve([
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+      { rel: 'f' },
+    ]);
     expect(res.title).toBe('远亲');
   });
 });
-

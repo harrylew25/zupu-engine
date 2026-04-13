@@ -1,6 +1,6 @@
-import { ZupuEngine } from './zupuEngine.js';
 import { dictionary } from './dictionary.js';
-import { RelationStep } from './types/index.js';
+import type { RelationStep } from './types/index.js';
+import { ZupuEngine } from './zupuEngine.js';
 
 const engine = new ZupuEngine(dictionary, 'm');
 
@@ -15,4 +15,3 @@ const complexPath: RelationStep[] = [
 
 console.log('--- Zupu Engine Local Test ---');
 console.log(engine.resolve(complexPath));
-

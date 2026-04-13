@@ -1,4 +1,4 @@
-import { RelationCode, ZupuDictionary } from './types/index.js';
+import type { ZupuDictionary } from './types/index.js';
 
 export const dictionary: ZupuDictionary = {
   base: {

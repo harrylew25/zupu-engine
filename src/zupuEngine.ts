@@ -1,4 +1,9 @@
-import { RelationStep, KinshipResult, Gender, ZupuDictionary } from './types/index.js';
+import type {
+  Gender,
+  KinshipResult,
+  RelationStep,
+  ZupuDictionary,
+} from './types/index.js';
 
 export class ZupuEngine {
   constructor(
@@ -44,7 +49,8 @@ export class ZupuEngine {
   };
 
   private applySeniority = (title: string, index: number): string => {
-    const num = ['', '大', '二', '三', '四', '五', '六'][index] || index.toString();
+    const num =
+      ['', '大', '二', '三', '四', '五', '六'][index] || index.toString();
     return title === '叔公' ? `${num}叔` : `${num}${title.slice(-1)}`;
   };
 
@@ -52,4 +58,3 @@ export class ZupuEngine {
     return totalDepth >= 10 ? `第${totalDepth}代后裔` : '远亲';
   };
 }
-
